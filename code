@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Хомяк-Обжора</title>
+    <style>
+        /* CSS: Делаем красивый дизайн */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+            user-select: none; /* Запрещаем выделять текст при быстрых кликах */
+        }
+
+        .game-container {
+            background: white;
+            padding: 40px 30px;
+            border-radius: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            position: relative;
+            width: 90%;
+            max-width: 400px;
+        }
+
+        h1 {
+            color: #4a4a4a;
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .score-board {
+            font-size: 20px;
+            font-weight: bold;
+            color: #ff8c00;
+            margin-bottom: 30px;
+        }
+
+        /* Зона с хомяком */
+        .hamster-area {
+            position: relative;
+            height: 200px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+        }
+
+        .hamster {
+            font-size: 120px;
+            cursor: pointer;
+            transition: transform 0.1s ease;
+            z-index: 2;
+            line-height: 1;
+        }
+
+        /* Анимация при клике (приседание) */
+        .hamster:active, .hamster.eating {
+            transform: scale(0.9, 0.8) translateY(10px);
+        }
+
+        /* Облачко с текстом */
+        .speech-bubble {
+            position: absolute;
+            top: 0;
+            background: #ffeaa7;
+            color: #d63031;
+            padding: 10px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 14px;
+            transition: opacity 0.3s;
+            opacity: 0;
+            transform: translateY(10px);
+            z-index: 3;
+        }
+
+        .speech-bubble.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Летящие семечки */
+        .seed {
+            position: absolute;
+            font-size: 30px;
+            bottom: 100px;
+            pointer-events: none; /* Чтобы семечка не мешала кликать */
+            animation: flyUp 0.6s ease-out forwards;
+            z-index: 1;
+        }
+
+        @keyframes flyUp {
+            0% { transform: translateY(0) scale(1); opacity: 1; }
+            100% { transform: translateY(-100px) scale(1.5) rotate(45deg); opacity: 0; }
+        }
+
+        /* Кнопка сброса */
+        .reset-btn {
+            margin-top: 30px;
+            background: #6c5ce7;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 16px;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: background 0.2s;
+            font-weight: bold;
+        }
+
+        .reset-btn:hover {
+            background: #5b4bc4;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="game-container">
+        <h1>Хомяк-Обжора</h1>
+        <div class="score-board">Семечки: <span id="score">0</span> 🌻</div>
+        
+        <div class="hamster-area">
+            <div id="bubble" class="speech-bubble">Покорми меня!</div>
+            <div id="hamster" class="hamster">🐹</div>
+        </div>
+
+        <button class="reset-btn" id="reset-btn">Сбросить прогресс</button>
+    </div>
+
+    <script>
+        // JS: Логика игры
+        const hamster = document.getElementById('hamster');
+        const scoreDisplay = document.getElementById('score');
+        const bubble = document.getElementById('bubble');
+        const resetBtn = document.getElementById('reset-btn');
+
+        let score = 0;
+
+        // Смешные фразы хомяка
+        const phrases = [
+            "Ням-ням!", "Ещё!", "Хрум-хрум", "Вкусно!", 
+            "Давай больше!", "Я не толстый, я пушистый", "Мой животик!"
+        ];
+
+        // Функция, которая срабатывает при клике на хомяка
+        hamster.addEventListener('click', (e) => {
+            // 1. Увеличиваем счет
+            score++;
+            scoreDisplay.textContent = score;
+
+            // 2. Анимация хомяка (добавляем класс, потом убираем)
+            hamster.classList.add('eating');
+            setTimeout(() => hamster.classList.remove('eating'), 150);
+
+            // 3. Создаем летящую семечку
+            createSeed(e.clientX, e.clientY);
+
+            // 4. Показываем облачко с текстом
+            showBubble();
+        });
+
+        // Функция для полета семечки
+        function createSeed(x, y) {
+            const seed = document.createElement('div');
+            seed.classList.add('seed');
+            seed.textContent = '🌻';
+            
+            // Позиционируем семечку там, где был клик
+            seed.style.left = (x - 15) + 'px'; 
+            seed.style.top = (y - 50) + 'px';
+
+            document.body.appendChild(seed);
+
+            // Удаляем семечку из кода после завершения анимации
+            setTimeout(() => seed.remove(), 600);
+        }
+
+        // Функция для облачка с текстом
+        function showBubble() {
+            // Выбираем случайную фразу
+            const randomPhrase = phrases[Math.floor(Math.random() * phrases.length)];
+            bubble.textContent = randomPhrase;
+            
+            // Показываем
+            bubble.classList.add('show');
+
+            // Прячем через полсекунды
+            setTimeout(() => {
+                bubble.classList.remove('show');
+            }, 800);
+        }
+
+        // Кнопка сброса
+        resetBtn.addEventListener('click', () => {
+            score = 0;
+            scoreDisplay.textContent = score;
+            bubble.textContent = "Покорми меня!";
+        });
+    </script>
+
+</body>
+</html>
