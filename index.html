@@ -3,86 +3,135 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Хомяк-Обжора</title>
+    <title>Пиксельный Хомяк</title>
     <style>
-        /* CSS: Делаем красивый дизайн */
+        /* --- БАЗОВЫЕ СТИЛИ --- */
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Courier New', Courier, monospace; /* Ретро шрифт */
         }
 
         body {
-            background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
+            background-color: #2d2d2d;
+            /* Пиксельный фон */
+            background-image: 
+                linear-gradient(45deg, #1a1a1a 25%, transparent 25%), 
+                linear-gradient(-45deg, #1a1a1a 25%, transparent 25%), 
+                linear-gradient(45deg, transparent 75%, #1a1a1a 75%), 
+                linear-gradient(-45deg, transparent 75%, #1a1a1a 75%);
+            background-size: 20px 20px;
+            background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
             overflow: hidden;
-            user-select: none; /* Запрещаем выделять текст при быстрых кликах */
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
         }
 
         .game-container {
-            background: white;
-            padding: 40px 30px;
-            border-radius: 30px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            background: #fdfaf6;
+            padding: 30px 20px;
+            border-radius: 4px;
+            border: 4px solid #3d2314;
+            box-shadow: 8px 8px 0 #3d2314;
             text-align: center;
             position: relative;
             width: 90%;
-            max-width: 400px;
+            max-width: 380px;
         }
 
         h1 {
-            color: #4a4a4a;
-            font-size: 24px;
-            margin-bottom: 10px;
+            color: #3d2314;
+            font-size: 22px;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
         }
 
         .score-board {
-            font-size: 20px;
+            font-size: 18px;
             font-weight: bold;
-            color: #ff8c00;
-            margin-bottom: 30px;
+            color: #f5a623;
+            background: #3d2314;
+            display: inline-block;
+            padding: 8px 16px;
+            border-radius: 4px;
+            margin-bottom: 20px;
         }
 
-        /* Зона с хомяком */
+        /* --- ЗОНА ХОМЯКА --- */
         .hamster-area {
             position: relative;
-            height: 200px;
+            height: 220px;
             display: flex;
             justify-content: center;
-            align-items: flex-end;
+            align-items: center;
+            margin-bottom: 20px;
         }
 
-        .hamster {
-            font-size: 120px;
+        /* Контейнер для кликов */
+        .click-area {
+            position: relative;
+            width: 192px;
+            height: 160px;
             cursor: pointer;
             transition: transform 0.1s ease;
             z-index: 2;
-            line-height: 1;
         }
 
-        /* Анимация при клике (приседание) */
-        .hamster:active, .hamster.eating {
-            transform: scale(0.9, 0.8) translateY(10px);
+        /* Анимация приседания */
+        .click-area.eating {
+            transform: translateY(10px) scale(0.9, 0.8);
         }
 
-        /* Облачко с текстом */
-        .speech-bubble {
+        /* --- ПИКСЕЛЬНЫЙ ХОМЯК (Магия CSS) --- */
+        .pixel-hamster {
             position: absolute;
             top: 0;
-            background: #ffeaa7;
-            color: #d63031;
+            left: 0;
+            width: 16px;
+            height: 16px;
+            background: transparent;
+            /* Рисуем пиксели через тени */
+            box-shadow: 
+                /* Голова и уши */
+                48px 0 #3d2314, 64px 0 #3d2314, 112px 0 #3d2314, 128px 0 #3d2314,
+                32px 16px #3d2314, 48px 16px #f5a623, 64px 16px #f5a623, 80px 16px #3d2314, 96px 16px #3d2314, 112px 16px #f5a623, 128px 16px #f5a623, 144px 16px #3d2314,
+                16px 32px #3d2314, 32px 32px #f5a623, 48px 32px #f5a623, 64px 32px #f5a623, 80px 32px #f5a623, 96px 32px #f5a623, 112px 32px #f5a623, 128px 32px #f5a623, 144px 32px #f5a623, 160px 32px #3d2314,
+                0px 48px #3d2314, 16px 48px #f5a623, 32px 48px #f5a623, 48px 48px #f5a623, 64px 48px #1a1a1a, 80px 48px #f5a623, 96px 48px #f5a623, 112px 48px #1a1a1a, 128px 48px #f5a623, 144px 48px #f5a623, 160px 48px #f5a623, 176px 48px #3d2314,
+                /* Щечки и глазки */
+                0px 64px #3d2314, 16px 64px #f5a623, 32px 64px #ff9b9b, 48px 64px #f5a623, 64px 64px #1a1a1a, 80px 64px #f5a623, 96px 64px #f5a623, 112px 64px #1a1a1a, 128px 64px #f5a623, 144px 64px #ff9b9b, 160px 64px #f5a623, 176px 64px #3d2314,
+                /* Носик */
+                0px 80px #3d2314, 16px 80px #f5a623, 32px 80px #f5a623, 48px 80px #f5a623, 64px 80px #f5a623, 80px 80px #ff9b9b, 96px 80px #ff9b9b, 112px 80px #f5a623, 128px 80px #f5a623, 144px 80px #f5a623, 160px 80px #f5a623, 176px 80px #3d2314,
+                /* Ротик */
+                0px 96px #3d2314, 16px 96px #fcebba, 32px 96px #fcebba, 48px 96px #fcebba, 64px 96px #fcebba, 80px 96px #3d2314, 96px 96px #3d2314, 112px 96px #fcebba, 128px 96px #fcebba, 144px 96px #fcebba, 160px 96px #fcebba, 176px 96px #3d2314,
+                /* Животик */
+                16px 112px #3d2314, 32px 112px #fcebba, 48px 112px #fcebba, 64px 112px #fcebba, 80px 112px #fcebba, 96px 112px #fcebba, 112px 112px #fcebba, 128px 112px #fcebba, 144px 112px #fcebba, 160px 112px #3d2314,
+                32px 128px #3d2314, 48px 128px #fcebba, 64px 128px #fcebba, 80px 128px #fcebba, 96px 128px #fcebba, 112px 128px #fcebba, 128px 128px #fcebba, 144px 128px #3d2314,
+                /* Лапки */
+                48px 144px #3d2314, 64px 144px #3d2314, 80px 144px #3d2314, 96px 144px #3d2314, 112px 144px #3d2314, 128px 144px #3d2314;
+        }
+
+        /* --- ОБЛАЧКО С ТЕКСТОМ --- */
+        .speech-bubble {
+            position: absolute;
+            top: -10px;
+            background: #fff;
+            color: #3d2314;
             padding: 10px 15px;
-            border-radius: 20px;
+            border: 3px solid #3d2314;
+            border-radius: 8px;
             font-weight: bold;
             font-size: 14px;
-            transition: opacity 0.3s;
+            transition: opacity 0.3s, transform 0.3s;
             opacity: 0;
             transform: translateY(10px);
             z-index: 3;
+            box-shadow: 4px 4px 0 #3d2314;
         }
 
         .speech-bubble.show {
@@ -90,37 +139,46 @@
             transform: translateY(0);
         }
 
-        /* Летящие семечки */
+        /* --- ЛЕТЯЩИЕ СЕМЕЧКИ --- */
         .seed {
             position: absolute;
-            font-size: 30px;
-            bottom: 100px;
-            pointer-events: none; /* Чтобы семечка не мешала кликать */
-            animation: flyUp 0.6s ease-out forwards;
+            width: 12px;
+            height: 18px;
+            background: #feca57;
+            border: 3px solid #3d2314;
+            border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%; /* Форма семечки */
+            pointer-events: none;
             z-index: 1;
         }
 
-        @keyframes flyUp {
-            0% { transform: translateY(0) scale(1); opacity: 1; }
-            100% { transform: translateY(-100px) scale(1.5) rotate(45deg); opacity: 0; }
+        .seed.fly {
+            animation: flyUp 0.8s cubic-bezier(0.25, 1, 0.5, 1) forwards;
         }
 
-        /* Кнопка сброса */
+        @keyframes flyUp {
+            0% { transform: translateY(0) scale(1) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(-150px) scale(0.5) rotate(180deg); opacity: 0; }
+        }
+
+        /* --- КНОПКА СБРОСА --- */
         .reset-btn {
-            margin-top: 30px;
-            background: #6c5ce7;
-            color: white;
-            border: none;
+            margin-top: 15px;
+            background: #ff9b9b;
+            color: #3d2314;
+            border: 3px solid #3d2314;
             padding: 12px 24px;
             font-size: 16px;
-            border-radius: 15px;
+            border-radius: 4px;
             cursor: pointer;
-            transition: background 0.2s;
             font-weight: bold;
+            transition: all 0.1s;
+            box-shadow: 4px 4px 0 #3d2314;
+            text-transform: uppercase;
         }
 
-        .reset-btn:hover {
-            background: #5b4bc4;
+        .reset-btn:active {
+            transform: translate(4px, 4px);
+            box-shadow: 0 0 0 #3d2314;
         }
     </style>
 </head>
@@ -128,74 +186,73 @@
 
     <div class="game-container">
         <h1>Хомяк-Обжора</h1>
-        <div class="score-board">Семечки: <span id="score">0</span> 🌻</div>
+        <div class="score-board">Семечки: <span id="score">0</span></div>
         
         <div class="hamster-area">
             <div id="bubble" class="speech-bubble">Покорми меня!</div>
-            <div id="hamster" class="hamster">🐹</div>
+            
+            <!-- Контейнер для клика и сам пиксельный хомяк -->
+            <div id="hamster" class="click-area">
+                <div class="pixel-hamster"></div>
+            </div>
         </div>
 
-        <button class="reset-btn" id="reset-btn">Сбросить прогресс</button>
+        <button class="reset-btn" id="reset-btn">Сброс</button>
     </div>
 
     <script>
-        // JS: Логика игры
+        // --- ЛОГИКА ИГРЫ ---
         const hamster = document.getElementById('hamster');
         const scoreDisplay = document.getElementById('score');
         const bubble = document.getElementById('bubble');
         const resetBtn = document.getElementById('reset-btn');
 
         let score = 0;
-
-        // Смешные фразы хомяка
         const phrases = [
             "Ням-ням!", "Ещё!", "Хрум-хрум", "Вкусно!", 
-            "Давай больше!", "Я не толстый, я пушистый", "Мой животик!"
+            "Давай больше!", "Я не толстый!", "Мой животик!"
         ];
 
-        // Функция, которая срабатывает при клике на хомяка
+        // Клик по хомяку
         hamster.addEventListener('click', (e) => {
-            // 1. Увеличиваем счет
+            // Счет
             score++;
             scoreDisplay.textContent = score;
 
-            // 2. Анимация хомяка (добавляем класс, потом убираем)
+            // Анимация
             hamster.classList.add('eating');
             setTimeout(() => hamster.classList.remove('eating'), 150);
 
-            // 3. Создаем летящую семечку
+            // Семечка (берем координаты клика)
             createSeed(e.clientX, e.clientY);
 
-            // 4. Показываем облачко с текстом
+            // Текст в облачке
             showBubble();
         });
 
-        // Функция для полета семечки
         function createSeed(x, y) {
             const seed = document.createElement('div');
             seed.classList.add('seed');
-            seed.textContent = '🌻';
             
-            // Позиционируем семечку там, где был клик
-            seed.style.left = (x - 15) + 'px'; 
-            seed.style.top = (y - 50) + 'px';
+            // Позиция
+            seed.style.left = (x - 6) + 'px'; 
+            seed.style.top = (y - 10) + 'px';
 
             document.body.appendChild(seed);
 
-            // Удаляем семечку из кода после завершения анимации
-            setTimeout(() => seed.remove(), 600);
+            // Запускаем анимацию через миллисекунду
+            setTimeout(() => seed.classList.add('fly'), 10);
+
+            // Удаляем элемент после завершения анимации
+            setTimeout(() => seed.remove(), 800);
         }
 
-        // Функция для облачка с текстом
         function showBubble() {
-            // Выбираем случайную фразу
             const randomPhrase = phrases[Math.floor(Math.random() * phrases.length)];
             bubble.textContent = randomPhrase;
             
-            // Показываем
             bubble.classList.add('show');
 
-            // Прячем через полсекунды
             setTimeout(() => {
                 bubble.classList.remove('show');
             }, 800);
@@ -206,6 +263,8 @@
             score = 0;
             scoreDisplay.textContent = score;
             bubble.textContent = "Покорми меня!";
+            bubble.classList.add('show');
+            setTimeout(() => bubble.classList.remove('show'), 800);
         });
     </script>
 
